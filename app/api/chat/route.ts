@@ -10,8 +10,6 @@ import {ChatPromptTemplate} from "langchain/prompts";
 import {RunnableSequence} from "langchain/schema/runnable";
 import {StringOutputParser} from "langchain/schema/output_parser";
 
-export const runtime = 'edge'
-
 class FDAOutputParser extends ChatAgentOutputParser {
     constructor() {
         super()
