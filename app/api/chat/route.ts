@@ -262,6 +262,28 @@ Provide a detailed report to answer the user's question using the following info
 - Details:
 `
 
+const MAX_TOKENS = 16000
+
+const truncateContextData = (contextData: string, percentage: number = 0.5): string => {
+    const maxTokens = Math.floor(MAX_TOKENS * percentage);
+    const tokens = estimateTokens(contextData);
+    if (tokens > maxTokens) {
+        const truncated = contextData.split(' ').slice(0, maxTokens).join(' ');
+        return truncated;
+    }
+    return contextData;
+}
+
+function estimateTokens(text: string): number {
+  // Use regex to split text by whitespace and some common punctuation marks
+  const tokens = text.split(/\s+|[,.!?;]/);
+
+  // Filter out empty strings which may result from the split operation
+  const nonEmptyTokens = tokens.filter(token => token.length > 0);
+
+  return nonEmptyTokens.length;
+}
+
 const humanMessage = '{input}'
 
 const openai = new OpenAIApi(configuration)
@@ -315,8 +337,8 @@ export async function POST(req: Request) {
 
     let fdaResult = await FDATool(searchParams, fieldsToReturn, limit)
     console.log('FDA result: ', fdaResult)
-    fdaResult = fdaResult.slice(0, 3000)
 
+    fdaResult = truncateContextData(fdaResult, 0.4)
 
     const lastMessage = messages.pop()
     const context = fdaResult
@@ -346,7 +368,7 @@ export async function POST(req: Request) {
         messages,
         temperature: 0.7,
         stream: true,
-        max_tokens: 14000
+        max_tokens: MAX_TOKENS * 0.4
     })
 
     const textInput = `
@@ -370,8 +392,6 @@ export async function POST(req: Request) {
                 createdAt,
                 path,
                 messages: [
-                    ["system", systemMessageSummarize],
-                    ["user", textInput],
                     {
                         content: completion,
                         role: 'assistant'
