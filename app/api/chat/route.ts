@@ -6,9 +6,9 @@ import {auth} from '@/auth'
 import {nanoid} from '@/lib/utils'
 import {ChatAgentOutputParser} from 'langchain/agents'
 import {ChatOpenAI} from "langchain/chat_models/openai"
-import {ChatPromptTemplate, PromptTemplate} from "langchain/prompts";
-import {RunnableSequence} from "langchain/dist/schema/runnable";
-import {StringOutputParser} from "langchain/dist/schema/output_parser";
+import {ChatPromptTemplate} from "langchain/prompts";
+import {RunnableSequence} from "langchain/schema/runnable";
+import {StringOutputParser} from "langchain/schema/output_parser";
 
 export const runtime = 'edge'
 
