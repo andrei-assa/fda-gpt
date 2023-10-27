@@ -320,7 +320,7 @@ export async function POST(req: Request) {
 
     let fdaResult = await FDATool(searchParams, fieldsToReturn, limit)
     console.log('FDA result: ', fdaResult)
-    fdaResult = fdaResult.slice(0, 15000)
+    fdaResult = fdaResult.slice(0, 7000)
 
 
     const lastMessage = messages.pop()
@@ -351,7 +351,7 @@ export async function POST(req: Request) {
         messages,
         temperature: 0.7,
         stream: true,
-        max_tokens: 14000
+        max_tokens: 16385
     })
 
     const textInput = `
