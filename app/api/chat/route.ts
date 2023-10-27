@@ -219,7 +219,7 @@ export async function POST(req: Request) {
     )
 
     let result = await agent1.invoke({
-        input: messages[0].content
+        input: messages[messages.length - 1].content
     })
 
     result = result.replace("JSON: ", "")
@@ -269,6 +269,14 @@ export async function POST(req: Request) {
         stream: true
     })
 
+    const textInput = `
+        Question:
+        ${messages[messages.length - 1].content}
+        
+        Information:
+        ${fdaResult}
+    `
+
     const stream = OpenAIStream(res, {
         async onCompletion(completion) {
             const title = json.messages[0].content.substring(0, 100)
@@ -283,9 +291,7 @@ export async function POST(req: Request) {
                 path,
                 messages: [
                     ["system", systemMessageSummarize],
-                    ...messages,
-                    ["system", fdaResult],
-                    ["human", messages[(messages.length - 1)].content],
+                    ["human", textInput],
                     {
                         content: completion,
                         role: 'assistant'
