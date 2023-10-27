@@ -348,6 +348,28 @@ export async function POST(req: Request) {
     //     information: fdaResult
     // })
 
+
+    const lastMessageContent = messages[messages.length - 1].content
+    const context = fdaResult
+    const instructions = systemMessageSummarize
+
+    const newLastMessage = {
+        role: 'user',
+        content: `
+            Instructions:
+            ${instructions}
+            
+            Question:
+            ${lastMessageContent}
+            
+            Context:
+            ${context}
+        `
+    }
+
+    messages[messages.length - 1] = newLastMessage
+
+
     const res = await openai.createChatCompletion({
         model: 'gpt-3.5-turbo-16k',
         messages,
