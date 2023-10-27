@@ -323,32 +323,6 @@ export async function POST(req: Request) {
     fdaResult = fdaResult.slice(0, 15000)
 
 
-    // const fdaPromptTemplate2 = ChatPromptTemplate.fromMessages([
-    //     ["system", systemMessageSummarize],
-    //     ["human", apiMessage]
-    // ])
-
-    // const agent2 = RunnableSequence.from([{
-    //         question: (x: any) => x.question,
-    //         information: (x: any) => x.information
-    //     },
-    //         fdaPromptTemplate2,
-    //         llm,
-    //         new StringOutputParser()
-    //     ]
-    // )
-
-    // const stream2 = agent2.stream({
-    //     question: messages[0].content,
-    //     information: fdaResult
-    // })
-
-    // const response = agent2.invoke({
-    //     question: messages[(messages.length - 1)].content,
-    //     information: fdaResult
-    // })
-
-
     const lastMessageContent = messages[messages.length - 1].content
     const context = fdaResult
     const instructions = systemMessageSummarize
@@ -374,7 +348,8 @@ export async function POST(req: Request) {
         model: 'gpt-3.5-turbo-16k',
         messages,
         temperature: 0.7,
-        stream: true
+        stream: true,
+        max_tokens: 14000
     })
 
     const textInput = `
