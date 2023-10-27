@@ -47,6 +47,7 @@ const configuration = new Configuration({
 type SearchParam = { [key: string]: any };
 type SortParam = string;
 type FieldToReturn = string;
+
 interface IFDAResponse {
     results: any[];
 }
@@ -114,6 +115,7 @@ function extractFieldsFromResults(results: any[], fieldsToReturn: FieldToReturn[
         return extracted;
     });
 }
+
 async function FDATool(searchParams: SearchParam[], fieldsToReturn: FieldToReturn[], limit: number = 20): Promise<string> {
     const search = new FDAApi();
     try {
@@ -199,7 +201,8 @@ export async function POST(req: Request) {
     }
 
     let llm = new ChatOpenAI({
-        modelName: "gpt-3.5-turbo-16k"
+        modelName: "gpt-3.5-turbo-16k",
+        streaming: true,
     })
 
     const fdaPromptTemplate = ChatPromptTemplate.fromMessages([
@@ -222,7 +225,6 @@ export async function POST(req: Request) {
     result = result.replace("JSON: ", "")
 
 
-
     let parsedResult = JSON.parse(result)
     let searchParams = parsedResult.search_params
     let fieldsToReturn = parsedResult.fields_to_return
@@ -230,28 +232,41 @@ export async function POST(req: Request) {
 
     const fdaResult = await FDATool(searchParams, fieldsToReturn, limit)
 
-    const fdaPromptTemplate2 = ChatPromptTemplate.fromMessages([
-        ["system", systemMessageSummarize],
-        ["human", apiMessage]
-    ])
+    // const fdaPromptTemplate2 = ChatPromptTemplate.fromMessages([
+    //     ["system", systemMessageSummarize],
+    //     ["human", apiMessage]
+    // ])
 
-    const agent2 = RunnableSequence.from([{
-            question: (x: any) => x.question,
-            information: (x: any) => x.information
-        },
-            fdaPromptTemplate2,
-            llm,
-            new StringOutputParser()
-        ]
-    )
+    // const agent2 = RunnableSequence.from([{
+    //         question: (x: any) => x.question,
+    //         information: (x: any) => x.information
+    //     },
+    //         fdaPromptTemplate2,
+    //         llm,
+    //         new StringOutputParser()
+    //     ]
+    // )
 
-    const stream2 = agent2.stream({
-        question: messages[0].content,
-        information: fdaResult
+    // const stream2 = agent2.stream({
+    //     question: messages[0].content,
+    //     information: fdaResult
+    // })
+
+    // const response = agent2.invoke({
+    //     question: messages[(messages.length - 1)].content,
+    //     information: fdaResult
+    // })
+
+    const res = await openai.createChatCompletion({
+        model: 'gpt-3.5-turbo-16k',
+        messages,
+        temperature: 0.7,
+        stream: true
     })
 
-    stream2.then(async (data) => {
-        const title = json.messages[0].content.substring(0, 100)
+    const stream = OpenAIStream(res, {
+        async onCompletion(completion) {
+            const title = json.messages[0].content.substring(0, 100)
             const id = json.id ?? nanoid()
             const createdAt = Date.now()
             const path = `/chat/${id}`
@@ -263,8 +278,11 @@ export async function POST(req: Request) {
                 path,
                 messages: [
                     ...messages,
+                    ["system", systemMessageSummarize],
+                    ["human", messages[(messages.length - 1)].content],
+                    ["human", fdaResult],
                     {
-                        content: data,
+                        content: completion,
                         role: 'assistant'
                     }
                 ]
@@ -274,7 +292,8 @@ export async function POST(req: Request) {
                 score: createdAt,
                 member: `chat:${id}`
             })
+        }
     })
 
-    return new StreamingTextResponse(await stream2)
+    return new StreamingTextResponse(stream)
 }
