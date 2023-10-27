@@ -351,7 +351,7 @@ export async function POST(req: Request) {
         messages,
         temperature: 0.7,
         stream: true,
-        max_tokens: 16385
+        max_tokens: 7000
     })
 
     const textInput = `
