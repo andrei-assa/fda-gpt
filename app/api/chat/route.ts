@@ -275,13 +275,13 @@ const truncateContextData = (contextData: string, percentage: number = 0.5): str
 }
 
 function estimateTokens(text: string): number {
-  // Use regex to split text by whitespace and some common punctuation marks
-  const tokens = text.split(/\s+|[,.!?;]/);
+    // Use regex to split text by whitespace and some common punctuation marks
+    const tokens = text.split(/\s+|[,.!?;]/);
 
-  // Filter out empty strings which may result from the split operation
-  const nonEmptyTokens = tokens.filter(token => token.length > 0);
+    // Filter out empty strings which may result from the split operation
+    const nonEmptyTokens = tokens.filter(token => token.length > 0);
 
-  return nonEmptyTokens.length;
+    return nonEmptyTokens.length;
 }
 
 const humanMessage = '{input}'
@@ -392,6 +392,7 @@ export async function POST(req: Request) {
                 createdAt,
                 path,
                 messages: [
+                    ...messages,
                     {
                         content: completion,
                         role: 'assistant'
