@@ -321,8 +321,10 @@ export async function POST(req: Request) {
         ]
     )
 
+    const userInput = messages[messages.length - 1].content
+
     let result = await agent1.invoke({
-        input: messages[messages.length - 1].content
+        input: userInput
     })
 
     result = result.replace("JSON: ", "")
@@ -381,7 +383,7 @@ export async function POST(req: Request) {
 
     const stream = OpenAIStream(res, {
         async onCompletion(completion) {
-            const title = json.messages[0].content.substring(0, 100)
+            const title = userInput.substring(0, 100)
             const id = json.id ?? nanoid()
             const createdAt = Date.now()
             const path = `/chat/${id}`
