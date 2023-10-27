@@ -215,9 +215,13 @@ export async function POST(req: Request) {
         ]
     )
 
-    const result = await agent1.invoke({
+    let result = await agent1.invoke({
         input: messages[0].content
     })
+
+    result = result.replace("JSON: ", "")
+
+
 
     let parsedResult = JSON.parse(result)
     let searchParams = parsedResult.search_params
