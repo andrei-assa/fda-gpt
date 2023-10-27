@@ -261,12 +261,6 @@ Provide a detailed report to answer the user's question using the following info
 - Details:
 `
 
-const apiMessage = `
-    {question}
-    
-    {information}
-`
-
 const humanMessage = '{input}'
 
 const openai = new OpenAIApi(configuration)
@@ -351,7 +345,7 @@ export async function POST(req: Request) {
         messages,
         temperature: 0.7,
         stream: true,
-        max_tokens: 7000
+        max_tokens: 14000
     })
 
     const textInput = `
