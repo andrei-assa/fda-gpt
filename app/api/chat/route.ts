@@ -224,13 +224,18 @@ export async function POST(req: Request) {
 
     result = result.replace("JSON: ", "")
 
-
     let parsedResult = JSON.parse(result)
+
+    console.log('FDA query: ', parsedResult)
+
     let searchParams = parsedResult.search_params
     let fieldsToReturn = parsedResult.fields_to_return
     let limit = parsedResult.limit
 
-    const fdaResult = await FDATool(searchParams, fieldsToReturn, limit)
+    let fdaResult = await FDATool(searchParams, fieldsToReturn, limit)
+    console.log('FDA result: ', fdaResult)
+    fdaResult = fdaResult.slice(0, 15000)
+
 
     // const fdaPromptTemplate2 = ChatPromptTemplate.fromMessages([
     //     ["system", systemMessageSummarize],
@@ -277,10 +282,10 @@ export async function POST(req: Request) {
                 createdAt,
                 path,
                 messages: [
-                    ...messages,
                     ["system", systemMessageSummarize],
+                    ...messages,
+                    ["system", fdaResult],
                     ["human", messages[(messages.length - 1)].content],
-                    ["human", fdaResult],
                     {
                         content: completion,
                         role: 'assistant'
