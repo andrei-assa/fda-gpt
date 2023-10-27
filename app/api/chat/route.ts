@@ -339,7 +339,7 @@ export async function POST(req: Request) {
     const lastMessageContent = lastMessage.content
 
     messages.push({
-        role: 'human',
+        role: 'user',
         content: `
             Question:
             ${lastMessageContent}
@@ -376,7 +376,7 @@ export async function POST(req: Request) {
                 path,
                 messages: [
                     ["system", systemMessageSummarize],
-                    ["human", textInput],
+                    ["user", textInput],
                     {
                         content: completion,
                         role: 'assistant'
