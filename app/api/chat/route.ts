@@ -9,6 +9,7 @@ import {ChatOpenAI} from "langchain/chat_models/openai"
 import {ChatPromptTemplate} from "langchain/prompts";
 import {RunnableSequence} from "langchain/schema/runnable";
 import {StringOutputParser} from "langchain/schema/output_parser";
+export const maxDuration = 300;
 
 class FDAOutputParser extends ChatAgentOutputParser {
     constructor() {
