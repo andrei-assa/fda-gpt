@@ -6,16 +6,16 @@ import { IconArrowRight } from '@/components/ui/icons'
 
 const exampleMessages = [
   {
-    heading: 'Explain technical concepts',
-    message: `What is a "serverless function"?`
+    heading: 'What are side-effects of Xarelto?',
+    message: `What are side-effects of Xarelto?`
   },
   {
-    heading: 'Summarize an article',
-    message: 'Summarize the following article for a 2nd grader: \n'
+    heading: 'Are there any pregnancy warnings for lisinopril?',
+    message: 'Are there any pregnancy warnings for lisinopril?'
   },
   {
-    heading: 'Draft an email',
-    message: `Draft an email to my boss about the following: \n`
+    heading: 'What is the mechanism of action of Opdivo?',
+    message: `What is the mechanism of action of Opdivo?`
   }
 ]
 
@@ -24,14 +24,11 @@ export function EmptyScreen({ setInput }: Pick<UseChatHelpers, 'setInput'>) {
     <div className="mx-auto max-w-2xl px-4">
       <div className="rounded-lg border bg-background p-8">
         <h1 className="mb-2 text-lg font-semibold">
-          Welcome to Next.js AI Chatbot!
+          Welcome to FDA GPT.
         </h1>
         <p className="mb-2 leading-normal text-muted-foreground">
-          This is an open source AI chatbot app template built with{' '}
-          <ExternalLink href="https://nextjs.org">Next.js</ExternalLink> and{' '}
-          <ExternalLink href="https://vercel.com/storage/kv">
-            Vercel KV
-          </ExternalLink>
+          This is a chatbot that answers questions based on data from the {' '}
+          <ExternalLink href="https://www.fda.gov/">United States Food and Drug Administration (FDA)</ExternalLink>
           .
         </p>
         <p className="leading-normal text-muted-foreground">
