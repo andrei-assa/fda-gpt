@@ -326,7 +326,7 @@ export async function POST(req: Request) {
     })
 
     messages.push({
-        role: 'system',
+        role: 'user',
         content: context
     })
 
