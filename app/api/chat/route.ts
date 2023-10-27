@@ -320,7 +320,7 @@ export async function POST(req: Request) {
 
     let fdaResult = await FDATool(searchParams, fieldsToReturn, limit)
     console.log('FDA result: ', fdaResult)
-    fdaResult = fdaResult.slice(0, 7000)
+    fdaResult = fdaResult.slice(0, 3000)
 
 
     const lastMessage = messages.pop()
