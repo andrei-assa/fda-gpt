@@ -338,7 +338,7 @@ export async function POST(req: Request) {
     let fdaResult = await FDATool(searchParams, fieldsToReturn, limit)
     console.log('FDA result: ', fdaResult)
 
-    fdaResult = truncateContextData(fdaResult, 0.4)
+    fdaResult = truncateContextData(fdaResult, 0.2)
 
     const lastMessage = messages.pop()
     const context = fdaResult
