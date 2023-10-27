@@ -27,7 +27,7 @@ export function EmptyScreen({ setInput }: Pick<UseChatHelpers, 'setInput'>) {
           Welcome to FDA GPT.
         </h1>
         <p className="mb-2 leading-normal text-muted-foreground">
-          This is a chatbot that answers questions based on data from the {' '}
+          This is an AI-powered chatbot that answers questions based on data from the {' '}
           <ExternalLink href="https://www.fda.gov/">United States Food and Drug Administration (FDA)</ExternalLink>
           .
         </p>
